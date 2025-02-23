@@ -1,41 +1,95 @@
-import { Link } from "react-router-dom";
-import loginHero from "../assets/loginHero.jpg";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { signupUser, clearAuthState } from "../Redux/slices/authSlice";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
+import signupHero from "../assets/Bg.jpg";
 
 const Signup = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { loading, error, success } = useSelector((state) => state.auth);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(signupUser(formData));
+  };
+
+  useEffect(() => {
+    if (success) {
+      toast.success("Signup successful! 🎉");
+      setTimeout(() => {
+        dispatch(clearAuthState()); // ✅ Reset state AFTER showing toast
+        navigate("/login"); // ✅ Navigate after clearing state
+      }, 1000);
+    }
+    if (error) {
+      toast.error(error);
+      dispatch(clearAuthState()); // ✅ Clear error immediately
+    }
+  }, [success, error, navigate, dispatch]);
+
   return (
     <div className="relative flex items-center justify-center lg:h-[565px] min-h-screen w-full">
-      {/* Background Image */}
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{
-          backgroundImage: `url(${loginHero})`,
-          filter: "brightness(50%) blur(2px)", // Darkens & slightly blurs background
+          backgroundImage: `url(${signupHero})`,
+          filter: "brightness(60%)",
         }}
       ></div>
 
-      {/* Signup Form */}
       <div className="relative bg-white p-8 rounded-lg shadow-xl w-96 bg-opacity-95 z-10">
         <h2 className="text-3xl font-bold text-center mb-6 text-gray-800">
           Sign Up
         </h2>
-        <input
-          type="text"
-          placeholder="Username"
-          className="w-full mb-3 p-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          className="w-full mb-3 p-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          className="w-full mb-3 p-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        <button className="w-full bg-black text-white p-3 rounded hover:bg-gray-900 transition">
-          Sign Up
-        </button>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            placeholder="Username"
+            className="w-full mb-3 p-3 border rounded"
+            required
+          />
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            placeholder="Email"
+            className="w-full mb-3 p-3 border rounded"
+            required
+          />
+          <input
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            placeholder="Password"
+            className="w-full mb-3 p-3 border rounded"
+            required
+          />
+          <button
+            type="submit"
+            className="w-full bg-black text-white p-3 rounded hover:bg-gray-900 transition"
+            disabled={loading}
+          >
+            {loading ? "Signing up..." : "Sign Up"}
+          </button>
+        </form>
+
         <p className="mt-4 text-center text-gray-700">
           Already have an account?{" "}
           <Link to="/login" className="text-blue-500 hover:underline">
