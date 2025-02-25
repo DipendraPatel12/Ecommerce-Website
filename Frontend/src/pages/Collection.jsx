@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Product from "../components/Product";
 
@@ -50,42 +50,33 @@ const Collection = () => {
           <div className="mb-2">
             <input
               type="radio"
-              id="category1"
-              value="category1"
-              checked={categoryId === "category1"}
+              id="movies-poster"
+              value="Movies-Poster"
+              checked={categoryId === "Movies poster"}
               onChange={updateCategory}
               className="mr-2"
             />
             <label htmlFor="category1" className="cursor-pointer">
-              Category 1
+              Movies Poster
             </label>
           </div>
           <div className="mb-2">
             <input
               type="radio"
-              id="category2"
-              value="category2"
-              checked={categoryId === "category2"}
+              id="Spritual"
+              value="Spritual"
+              checked={categoryId === "Spritual"}
               onChange={updateCategory}
               className="mr-2"
             />
             <label htmlFor="category2" className="cursor-pointer">
-              Category 2
+              Spritual
             </label>
           </div>
         </div>
 
         {/* Product Display */}
         <div className="w-full md:w-3/4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <Product />
-          <Product />
-          <Product />
-          <Product />
-          <Product />
-          <Product />
-          <Product />
-          <Product />
-          <Product />
           <Product />
           <Product />
           <Product />

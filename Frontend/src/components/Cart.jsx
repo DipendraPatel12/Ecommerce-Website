@@ -1,10 +1,14 @@
-
 import { AiOutlineClose } from "react-icons/ai";
 import { BsCartX } from "react-icons/bs";
+import { useSelector, useDispatch } from "react-redux";
+import { clearCart } from "../Redux/slices/cartSlice";
+import CartItem from "./CarItem";
 
 const Cart = ({ onClose }) => {
-  const isCartEmpty = true; // Replace this with actual cart data
-  const totalAmount = 0; // Replace with real total price
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state) => state.cart.cartItems);
+  const isCartEmpty = cartItems.length === 0;
+  const totalAmount = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
   return (
     <div className="fixed inset-0 flex justify-end z-50">
@@ -24,16 +28,7 @@ const Cart = ({ onClose }) => {
         {/* Cart Items */}
         <div className="flex-1 overflow-y-auto mt-2">
           {!isCartEmpty ? (
-            <>
-              <div className="flex items-center gap-3 border-b py-3">
-                <img src="https://via.placeholder.com/60" alt="Product" className="w-14 h-14 rounded-md" />
-                <div className="flex-1">
-                  <h4 className="text-sm font-medium">Product Name</h4>
-                  <p className="text-xs text-gray-500">₹ 999 x 2</p>
-                </div>
-                <button className="text-red-500 text-xl">×</button>
-              </div>
-            </>
+            cartItems.map((item) => <CartItem key={item.id} item={item} />)
           ) : (
             <div className="flex flex-col items-center justify-center h-full text-gray-500">
               <BsCartX className="text-6xl mb-2" />
@@ -49,7 +44,10 @@ const Cart = ({ onClose }) => {
               <span>Total:</span>
               <span>₹ {totalAmount}</span>
             </div>
-            <button className="w-full bg-black text-white py-2 rounded-md mt-3 hover:bg-gray-800 transition">
+            <button
+              className="w-full bg-black text-white py-2 rounded-md mt-3 hover:bg-gray-800 transition"
+              onClick={() => dispatch(clearCart())}
+            >
               Proceed to Checkout
             </button>
           </div>

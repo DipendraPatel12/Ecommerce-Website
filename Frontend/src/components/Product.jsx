@@ -1,7 +1,14 @@
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../Redux/slices/cartSlice";
 
 const Product = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleAddToCart = (product) => {
+    dispatch(addToCart(product));
+  };
 
   // Dummy product data
   const product = {
@@ -31,10 +38,10 @@ const Product = () => {
       <div className="flex justify-between items-center mt-3">
         <p className="text-red-500 font-bold text-md">₹ {product.price}</p>
         <button
-          className="bg-blue-600 text-white px-4 py-1 rounded-md hover:bg-blue-700 transition"
+          className="bg-blue-600 text-white px-4 py-1 rounded-md hover:bg-blue-700 transition cursor-pointer"
           onClick={(e) => {
-            e.stopPropagation(); // Prevent navigation when clicking "Add to Cart"
-            console.log("Added to cart");
+            e.stopPropagation();
+            dispatch(handleAddToCart(product));
           }}
         >
           Add to Cart

@@ -25,7 +25,7 @@ const Hero = () => {
         </p>
         <button
           onClick={() => navigate("/category")}
-          className="mt-4 px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-md text-white font-bold shadow-lg"
+          className="mt-4 px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-md text-white font-bold shadow-lg cursor-pointer"
         >
           Explore more
         </button>

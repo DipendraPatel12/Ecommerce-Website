@@ -1,40 +1,49 @@
 import Product from "../models/Product.js";
 import cloudinary from "../config/cloudinary.js";
+import streamifier from "streamifier";
 
-export const createProduct = async (req, res) => {
+export const addProduct = async (req, res) => {
     try {
-        const { name, description, price, category, stock } = req.body;
-
-        // Check if file is uploaded
         if (!req.file) {
-            return res.status(400).json({ message: "Image file is required" });
+            return res.status(400).json({ message: "No image uploaded" });
         }
 
-        // Convert buffer to a Cloudinary-uploaded file
-        const uploadResult = await cloudinary.uploader.upload_stream({ resource_type: "image" }, async (error, result) => {
-            if (error) return res.status(500).json({ message: "Cloudinary upload failed", error });
-
-            const newProduct = new Product({
-                name,
-                description,
-                price,
-                category,
-                stock,
-                image: result.secure_url
-            });
-
-            await newProduct.save();
-            res.status(201).json({ message: "Product created successfully", product: newProduct });
+        // Upload image to Cloudinary
+        const uploadResult = await new Promise((resolve, reject) => {
+            const uploadStream = cloudinary.uploader.upload_stream(
+                { folder: "RoomImages" },
+                (error, result) => {
+                    if (error) {
+                        console.error("Cloudinary Upload Error:", error);
+                        reject(error);
+                    } else resolve(result);
+                }
+            );
+            streamifier.createReadStream(req.file.buffer).pipe(uploadStream);
         });
 
-        uploadResult.end(req.file.buffer); // Send buffer to Cloudinary
+        // ✅ Save Product with Image Object
+        const newProduct = new Product({
+            name: req.body.name,
+            description: req.body.description,
+            price: req.body.price,
+            category: req.body.category,
+            image: {  // ✅ Save image as an object
+                url: uploadResult.secure_url,
+                public_id: uploadResult.public_id
+            }
+        });
 
+        await newProduct.save();
+        res.status(201).json(newProduct);
     } catch (error) {
+        console.error("Error adding product:", error);
         res.status(500).json({ message: "Server error", error: error.message });
     }
 };
 
-// 🔹 Get all products
+
+// 🔹 Get All Products
 export const getProducts = async (req, res) => {
     try {
         const products = await Product.find();
@@ -44,7 +53,7 @@ export const getProducts = async (req, res) => {
     }
 };
 
-// 🔹 Get a single product by ID
+// 🔹 Get Single Product
 export const getProductById = async (req, res) => {
     try {
         const product = await Product.findById(req.params.id);
@@ -55,7 +64,7 @@ export const getProductById = async (req, res) => {
     }
 };
 
-// 🔹 Update a product
+// 🔹 Update Product (With Single Image Replacement)
 export const updateProduct = async (req, res) => {
     try {
         const product = await Product.findById(req.params.id);
@@ -65,22 +74,23 @@ export const updateProduct = async (req, res) => {
 
         // If a new image is uploaded, delete the old one from Cloudinary
         if (req.file) {
-            const oldImageUrl = product.image;
-            const publicId = oldImageUrl.split("/").pop().split(".")[0]; // Extract public ID from URL
-            await cloudinary.uploader.destroy(publicId); // Delete old image from Cloudinary
+            if (product.image && product.image.public_id) {
+                await cloudinary.uploader.destroy(product.image.public_id); // Delete old image
+            }
 
-            // Upload new image from buffer
+            // Upload new image
             const uploadResult = await new Promise((resolve, reject) => {
-                const uploadStream = cloudinary.uploader.upload_stream({ resource_type: "image" },
+                const uploadStream = cloudinary.uploader.upload_stream(
+                    { folder: "RoomImages" },
                     (error, result) => {
                         if (error) reject(error);
-                        else resolve(result);
+                        else resolve({ url: result.secure_url, public_id: result.public_id });
                     }
                 );
-                uploadStream.end(req.file.buffer); // Send buffer to Cloudinary
+                streamifier.createReadStream(req.file.buffer).pipe(uploadStream);
             });
 
-            product.image = uploadResult.secure_url; // Update image URL in the database
+            product.image = uploadResult; // Update image
         }
 
         // Update other fields
@@ -96,17 +106,17 @@ export const updateProduct = async (req, res) => {
         res.status(500).json({ message: "Server error", error: error.message });
     }
 };
-// 🔹 Delete a product
+
+// 🔹 Delete Product
 export const deleteProduct = async (req, res) => {
     try {
         const product = await Product.findById(req.params.id);
         if (!product) return res.status(404).json({ message: "Product not found" });
 
-        // Extract Cloudinary public ID
-        const publicId = product.image.split("/").pop().split(".")[0];
-
-        // Delete image from Cloudinary
-        await cloudinary.uploader.destroy(publicId);
+        // Delete image from Cloudinary if exists
+        if (product.image && product.image.public_id) {
+            await cloudinary.uploader.destroy(product.image.public_id);
+        }
 
         // Delete product from database
         await product.deleteOne();

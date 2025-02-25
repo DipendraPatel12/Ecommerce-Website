@@ -35,17 +35,17 @@ const authSlice = createSlice({
     token: localStorage.getItem("token") || null,
     loading: false,
     error: null,
-    success: false,  // ✅ Added success state
+    success: false, // ✅ Added success state
   },
   reducers: {
     logout: (state) => {
       state.user = null;
       state.token = null;
-      state.success = false;  // ✅ Reset success on logout
+      state.success = false; // ✅ Reset success on logout
       localStorage.removeItem("token");
     },
     clearAuthState: (state) => {
-      state.success = false;  // ✅ Reset success on clear
+      state.success = false; // ✅ Reset success on clear
       state.error = null;
     },
   },
@@ -55,13 +55,13 @@ const authSlice = createSlice({
       .addCase(signupUser.pending, (state) => {
         state.loading = true;
         state.error = null;
-        state.success = false;  // ✅ Reset success when request starts
+        state.success = false; // ✅ Reset success when request starts
       })
       .addCase(signupUser.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload.user;
         state.token = action.payload.token;
-        state.success = true;  // ✅ Mark success
+        state.success = true; // ✅ Mark success
         localStorage.setItem("token", action.payload.token);
       })
       .addCase(signupUser.rejected, (state, action) => {
@@ -74,13 +74,13 @@ const authSlice = createSlice({
       .addCase(loginUser.pending, (state) => {
         state.loading = true;
         state.error = null;
-        state.success = false;  // ✅ Reset success when request starts
+        state.success = false; // ✅ Reset success when request starts
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload.user;
         state.token = action.payload.token;
-        state.success = true;  // ✅ Mark success
+        state.success = true; // ✅ Mark success
         localStorage.setItem("token", action.payload.token);
       })
       .addCase(loginUser.rejected, (state, action) => {
