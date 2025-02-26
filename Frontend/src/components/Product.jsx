@@ -1,48 +1,45 @@
-import { useNavigate } from "react-router-dom";
+import React from "react";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../Redux/slices/cartSlice";
+import { useNavigate } from "react-router-dom";
 
-const Product = () => {
-  const navigate = useNavigate();
+const Product = ({ product }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const handleAddToCart = (product) => {
-    dispatch(addToCart(product));
-  };
-
-  // Dummy product data
-  const product = {
-    id: "1",
-    title: "Stylish T-Shirt",
-    price: "499",
-    image: "https://via.placeholder.com/300",
+  const handleAddToCart = (e) => {
+    e.stopPropagation(); // Prevents navigation when clicking "Add to Cart"
+    if (!product._id || !product.price) {
+      console.error("Invalid product data:", product);
+      return;
+    }
+    dispatch(
+      addToCart({
+        id: product._id, // Ensure _id is used
+        name: product.name,
+        price: product.price,
+        image: product.image?.url || product.image,
+        quantity: 1,
+      })
+    );
   };
 
   return (
     <div
-      className="bg-white rounded-lg shadow-lg p-4 cursor-pointer transition-transform hover:scale-105"
-      onClick={() => navigate(`/products/${product.id}`)} // Navigates to ProductDetail
+      className="border rounded-lg p-4 shadow-lg cursor-pointer"
+      onClick={() => navigate(`/product/${product._id}`)} // Ensure _id is used
     >
-      <div className="w-full h-48 flex justify-center items-center bg-gray-100 rounded-md">
-        <img
-          src={product.image}
-          alt={product.title}
-          className="w-full h-full object-contain rounded-md"
-        />
-      </div>
-
-      <div className="mt-3 text-center">
-        <p className="text-lg font-semibold">{product.title}</p>
-      </div>
-
-      <div className="flex justify-between items-center mt-3">
-        <p className="text-red-500 font-bold text-md">₹ {product.price}</p>
+      <img
+        src={product.image?.url || product.image}
+        alt={product.name}
+        className="w-full h-40 object-cover rounded"
+      />
+      <h2 className="text-lg font-semibold mt-2">{product.name}</h2>
+      <div className="flex justify-between">
+        <p className="text-gray-600 py-3">${product.price}</p>
         <button
-          className="bg-blue-600 text-white px-4 py-1 rounded-md hover:bg-blue-700 transition cursor-pointer"
-          onClick={(e) => {
-            e.stopPropagation();
-            dispatch(handleAddToCart(product));
-          }}
+          onClick={handleAddToCart}
+          className="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
         >
           Add to Cart
         </button>
@@ -50,5 +47,4 @@ const Product = () => {
     </div>
   );
 };
-
 export default Product;

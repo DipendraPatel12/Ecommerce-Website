@@ -12,6 +12,9 @@ import { useSelector } from "react-redux";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
 import UploadProduct from "./components/UploadProduct.jsx";
 
+
+import AdminRoute from "./components/AdminRoute";
+
 function App() {
   const cartItems = useSelector((state) => state.cart.cartItems);
 
@@ -28,11 +31,14 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/category/:categoryId?" element={<Collection />} />
-        <Route path="/products/:productId" element={<ProductDetail />} />
+        <Route path="/product/:productId" element={<ProductDetail />} />
 
         {/* Admin Dashboard Route */}
-        <Route path="/admin/dashboard" element={<AdminDashboard />} />
-        <Route path="/add-product" element={<UploadProduct />} />
+
+        <Route element={<AdminRoute />}>
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/add-product" element={<UploadProduct />} />
+        </Route>
       </Routes>
     </>
   );

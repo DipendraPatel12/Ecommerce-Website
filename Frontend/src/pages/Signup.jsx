@@ -45,7 +45,7 @@ const Signup = () => {
         className="absolute inset-0 bg-cover bg-center"
         style={{
           backgroundImage: `url(${signupHero})`,
-          filter: "brightness(60%)",
+          filter: "brightness(50%) blur(2px)",
         }}
       ></div>
 

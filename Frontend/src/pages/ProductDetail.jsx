@@ -1,38 +1,54 @@
 import { useParams } from "react-router-dom";
-import Herojpg from "../assets/Hero.jpg";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart } from "../Redux/slices/cartSlice";
+
 const ProductDetail = () => {
   const { productId } = useParams();
+  const dispatch = useDispatch();
 
-  // Dummy product data (Replace this with API call)
-  const product = {
-    id: productId,
-    title: "Stylish T-Shirt",
-    price: "499",
-    image: Herojpg,
-    description: "This is a high-quality stylish t-shirt.",
+  const product = useSelector((state) =>
+    state.products.products.find((p) => p._id === productId)
+  );
+
+  if (!product) {
+    return <p>Product not found</p>;
+  }
+
+  const handleAddToCart = () => {
+    dispatch(addToCart(product));
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-6">
-      <div className="max-w-5xl w-full bg-white shadow-lg rounded-lg p-6 flex flex-col md:flex-row gap-8">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-6">
+      <div className="max-w-4xl w-full bg-white shadow-lg rounded-lg p-6 flex flex-col md:flex-row gap-6">
         {/* Product Image */}
         <div className="w-full md:w-1/2 bg-gray-200 rounded-lg overflow-hidden">
           <img
-            src={product.image}
-            alt="Product"
-            className="w-full h-full object-cover"
+            src={product.image?.url}
+            alt={product.name}
+            className="w-full h-96 object-cover rounded-lg"
           />
         </div>
 
-        {/* Product Info */}
-        <div className="w-full md:w-1/2 flex flex-col gap-4">
-          <h1 className="text-2xl font-bold text-gray-800">{product.title}</h1>
-          <p className="text-lg text-gray-600 font-semibold">
-            ₹ {product.price}
-          </p>
-          <p className="text-sm text-gray-600 leading-relaxed">
-            {product.description}
-          </p>
+        {/* Product Details */}
+        <div className="w-full md:w-1/2 flex flex-col justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-800">{product.name}</h1>
+            <p className="text-xl text-gray-700 font-semibold mt-2">
+              ₹ {product.price}
+            </p>
+            <p className="text-md text-gray-600 leading-relaxed mt-3">
+              {product.description}
+            </p>
+          </div>
+
+          {/* Add to Cart Button */}
+          <button
+            onClick={handleAddToCart}
+            className="bg-blue-500 text-white text-lg px-6 py-3 rounded-lg mt-6 hover:bg-blue-700 transition duration-300"
+          >
+            Add to Cart 🛒
+          </button>
         </div>
       </div>
     </div>

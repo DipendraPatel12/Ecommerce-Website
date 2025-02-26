@@ -1,20 +1,55 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosClient from "../../utils/axiosClient";
 
-// Fetch Products
-export const fetchProducts = createAsyncThunk("products/fetch", async () => {
-  const response = await axiosClient.get("/products");
-  return response.data;
-});
+// Fetch all products
+export const fetchProducts = createAsyncThunk(
+  "products/fetchProducts",
+  async () => {
+    const response = await axiosClient.get("/products");
+    return response.data;
+  }
+);
 
-// Add Product (Single Image)
+// Add a new product
 export const addProduct = createAsyncThunk(
   "products/addProduct",
-  async (formData) => {
-    const response = await axiosClient.post("/products", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
+  async (formData, { rejectWithValue }) => {
+    try {
+      const response = await axiosClient.post(
+        "/products",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error(
+        "Error uploading product:",
+        error.response?.data || error.message
+      );
+      return rejectWithValue(error.response?.data || "Upload failed");
+    }
+  }
+);
+
+// Delete a product
+export const deleteProduct = createAsyncThunk(
+  "products/deleteProduct",
+  async (id) => {
+    await axiosClient.delete(`/products/${id}`);
+    return id;
+  }
+);
+
+// Edit a product (for example, updating the name or price)
+export const editProduct = createAsyncThunk(
+  "products/editProduct",
+  async ({ id, updatedData }) => {
+    const response = await axiosClient.put(`/products/${id}`, updatedData, {
+      headers: { "Content-Type": "multipart/form-data" }, // Ensure images are sent properly
     });
     return response.data;
   }
@@ -22,22 +57,32 @@ export const addProduct = createAsyncThunk(
 
 const productSlice = createSlice({
   name: "products",
-  initialState: { items: [], loading: false, error: null },
+  initialState: {
+    products: [],
+    status: "idle",
+    error: null,
+  },
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchProducts.pending, (state) => {
-        state.loading = true;
-      })
       .addCase(fetchProducts.fulfilled, (state, action) => {
-        state.loading = false;
-        state.items = action.payload;
-      })
-      .addCase(fetchProducts.rejected, (state) => {
-        state.loading = false;
+        state.products = action.payload;
       })
       .addCase(addProduct.fulfilled, (state, action) => {
-        state.items.push(action.payload);
+        state.products.push(action.payload);
+      })
+      .addCase(deleteProduct.fulfilled, (state, action) => {
+        state.products = state.products.filter(
+          (product) => product._id !== action.payload
+        );
+      })
+      .addCase(editProduct.fulfilled, (state, action) => {
+        const index = state.products.findIndex(
+          (product) => product._id === action.payload._id
+        );
+        if (index !== -1) {
+          state.products[index] = action.payload;
+        }
       });
   },
 });

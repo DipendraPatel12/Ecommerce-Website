@@ -1,63 +1,40 @@
-import { AiOutlineClose } from "react-icons/ai";
+import React from "react";
 import { useDispatch } from "react-redux";
-import { removeFromCart, updateQuantity } from "../redux/slices/cartSlice";
+import { removeFromCart, updateQuantity } from "../Redux/slices/cartSlice";
 
 const CartItem = ({ item }) => {
   const dispatch = useDispatch();
 
+  const handleQuantityChange = (e) => {
+    const newQuantity = parseInt(e.target.value, 10);
+    dispatch(updateQuantity({ id: item.id, quantity: newQuantity }));
+  };
+
   return (
-    <div className="flex items-center gap-4 p-4 bg-white rounded-lg shadow-md">
-      {/* Image Section */}
-      <div className="w-20 h-20 bg-gray-200 rounded-md overflow-hidden">
+    <div className="flex items-center justify-between p-4 border-b">
+      <div className="flex items-center space-x-4">
         <img
-          src={item.image}
-          alt={item.title}
-          className="w-full h-full object-cover"
+          src={item.image || item.image?.url}
+          alt={item.name}
+          className="w-16 h-16 object-cover rounded"
         />
-      </div>
-
-      {/* Info Section */}
-      <div className="flex-1">
-        <p className="text-sm font-medium text-gray-800">{item.title}</p>
-        <p className="text-sm text-gray-600">₹ {item.price}</p>
-
-        {/* Quantity Selector */}
-        <div className="flex items-center gap-2 mt-2">
-          <button
-            className="w-8 h-8 flex justify-center items-center bg-gray-300 rounded-md text-lg font-bold hover:bg-gray-400 transition"
-            onClick={() =>
-              dispatch(
-                updateQuantity({ id: item.id, quantity: item.quantity - 1 })
-              )
-            }
-          >
-            −
-          </button>
-          <span className="text-lg font-semibold">{item.quantity}</span>
-          <button
-            className="w-8 h-8 flex justify-center items-center bg-gray-300 rounded-md text-lg font-bold hover:bg-gray-400 transition"
-            onClick={() =>
-              dispatch(
-                updateQuantity({ id: item.id, quantity: item.quantity + 1 })
-              )
-            }
-          >
-            +
-          </button>
+        <div>
+          <h3 className="text-lg font-semibold">{item.name}</h3>
+          <p className="text-gray-600">${item.price}</p>
+          <input
+            type="number"
+            value={item.quantity}
+            min="1"
+            onChange={handleQuantityChange}
+            className="w-16 border p-1 text-center"
+          />
         </div>
-
-        {/* Subtotal */}
-        <p className="mt-1 text-sm text-gray-700 font-medium">
-          Subtotal: ₹ {item.price * item.quantity}
-        </p>
       </div>
-
-      {/* Remove Button */}
       <button
-        className="text-gray-500 hover:text-red-500 transition"
         onClick={() => dispatch(removeFromCart(item.id))}
+        className="bg-red-500 text-white px-3 py-1 rounded"
       >
-        <AiOutlineClose size={18} />
+        Remove
       </button>
     </div>
   );

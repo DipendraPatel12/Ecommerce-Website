@@ -8,6 +8,11 @@ import productRoutes from "./routes/productRoutes.js";
 
 
 dotenv.config();
+const corsOptions = {
+    origin: "https://ecommerce-website-azure-ten.vercel.app/",
+    credentials: true // Allow cookies to be sent with requests
+  };
+
 const Port = process.env.PORT || 4000;
 const app = express();
 app.use(express.urlencoded({ extended: true }));

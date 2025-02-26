@@ -8,19 +8,28 @@ const Cart = ({ onClose }) => {
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.cartItems);
   const isCartEmpty = cartItems.length === 0;
-  const totalAmount = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  const totalAmount = cartItems.reduce(
+    (acc, item) => acc + item.price * item.quantity,
+    0
+  );
 
   return (
     <div className="fixed inset-0 flex justify-end z-50">
       {/* Background Overlay */}
-      <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm" onClick={onClose}></div>
+      <div
+        className="fixed inset-0  opacity-50 "
+        onClick={onClose}
+      ></div>
 
       {/* Cart Content */}
       <div className="w-80 sm:w-96 bg-white h-full shadow-lg flex flex-col p-4 transform transition-transform duration-300 ease-in-out">
         {/* Header */}
         <div className="flex justify-between items-center border-b pb-2">
           <h3 className="text-lg font-semibold">Shopping Cart</h3>
-          <button className="text-2xl text-gray-600 hover:text-red-500" onClick={onClose}>
+          <button
+            className="text-2xl text-gray-600 hover:text-red-500"
+            onClick={onClose}
+          >
             <AiOutlineClose />
           </button>
         </div>
