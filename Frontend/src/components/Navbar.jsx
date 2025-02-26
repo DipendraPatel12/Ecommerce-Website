@@ -2,7 +2,7 @@ import { FaShoppingCart, FaUser, FaBars, FaTimes } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { logout } from "../redux/slices/authSlice";
+import { logout } from "../Redux/slices/authSlice";
 import Cart from "./Cart";
 
 const Navbar = () => {
