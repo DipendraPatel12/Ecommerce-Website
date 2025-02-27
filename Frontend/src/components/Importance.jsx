@@ -1,17 +1,8 @@
-import { motion } from "framer-motion";
-
 const Importance = () => {
   return (
     <div className="container mx-auto px-6 py-12">
       {/* First Section: Image Left - Text Right */}
-      <motion.div
-        id="right"
-        className="flex flex-col md:flex-row items-center gap-24"
-        initial={{ opacity: 0, x: 100 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        transition={{ duration: 1.2, ease: "easeInOut" }} // Slower transition
-        viewport={{ once: true, amount: 0.5 }} // Triggers smoothly when half in view
-      >
+      <div id="right" className="flex flex-col md:flex-row items-center gap-24">
         <img
           src="https://res.cloudinary.com/dwen6kq4r/image/upload/v1740593171/imp_xjperw.webp"
           alt="Importance"
@@ -32,17 +23,10 @@ const Importance = () => {
             adds personality and meaning to your surroundings.
           </p>
         </div>
-      </motion.div>
+      </div>
 
       {/* Second Section: Text Left - Image Right */}
-      <motion.div
-        id="left"
-        className="flex flex-col-reverse md:flex-row items-center gap-24 mt-12"
-        initial={{ opacity: 0, x: -100 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        transition={{ duration: 1.2, ease: "easeInOut", delay: 0.2 }} // Add delay for smoother effect
-        viewport={{ once: true, amount: 0.5 }} // Ensure smooth animation
-      >
+      <div id="left" className="flex flex-col-reverse md:flex-row items-center gap-24 mt-12">
         <div className="w-full md:w-1/2 text-center md:text-left">
           <h2 className="text-3xl font-bold mb-4">Enhance Your Space</h2>
           <p className="text-gray-600">
@@ -65,7 +49,7 @@ const Importance = () => {
           className="w-full sm:w-1/4 md:w-1/3 lg:w-1/3 rounded-lg shadow-lg"
           loading="lazy"
         />
-      </motion.div>
+      </div>
     </div>
   );
 };

@@ -87,12 +87,16 @@ const Navbar = () => {
       </nav>
 
       {/* Mobile Menu */}
+      {/* Mobile Menu */}
       {menuOpen && (
         <div className="md:hidden bg-black text-white flex flex-col items-center gap-4 py-4">
           {token ? (
             <button
               className="flex items-center gap-2 px-4 py-2 bg-white text-gray-700 rounded hover:text-black"
-              onClick={handleLogout}
+              onClick={() => {
+                handleLogout();
+                setMenuOpen(false); // Close menu after logout
+              }}
             >
               <FaUser size={20} />
               Logout
@@ -100,7 +104,10 @@ const Navbar = () => {
           ) : (
             <button
               className="flex items-center gap-2 px-4 py-2 bg-white text-gray-700 rounded hover:text-black"
-              onClick={() => navigate("/login")}
+              onClick={() => {
+                navigate("/login");
+                setMenuOpen(false); // Close menu after login
+              }}
             >
               <FaUser size={20} />
               Login
@@ -109,14 +116,20 @@ const Navbar = () => {
           {user?.isAdmin && (
             <button
               className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
-              onClick={() => navigate("/admin/dashboard")}
+              onClick={() => {
+                navigate("/admin/dashboard");
+                setMenuOpen(false); // Close menu after navigation
+              }}
             >
               Admin Dashboard
             </button>
           )}
           <button
             className="relative bg-white rounded px-4 py-2 text-gray-700 hover:text-black"
-            onClick={() => setIsCartOpen(true)}
+            onClick={() => {
+              setIsCartOpen(true);
+              setMenuOpen(false); // Close menu after opening cart
+            }}
           >
             <FaShoppingCart size={22} />
             {totalQuantity > 0 && (
