@@ -9,7 +9,7 @@ import productRoutes from "./routes/productRoutes.js";
 dotenv.config();
 
 const corsOptions = {
-    origin: ["https://posterzshop.vercel.app"],
+    origin: ["https://ecommerce-website-azure-ten.vercel.app", "http://localhost:5173"],
     credentials: true // Allow cookies to be sent with requests
 };
 
