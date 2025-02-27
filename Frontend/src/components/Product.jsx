@@ -39,7 +39,7 @@ const Product = ({ product }) => {
         <p className="text-gray-600 py-3">${product.price}</p>
         <button
           onClick={handleAddToCart}
-          className="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          className="mt-2 bg-blue-500 text-white px-4 py-2 cursor-pointer rounded hover:bg-blue-600"
         >
           Add to Cart
         </button>

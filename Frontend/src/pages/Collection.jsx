@@ -59,7 +59,7 @@ const Collection = () => {
             <button
               key={category}
               onClick={() => setSelectedCategory(category)}
-              className={`px-4 py-2 text-sm rounded-lg transition ${
+              className={`px-4 py-2 text-sm rounded-lg transition cursor-pointer ${
                 selectedCategory === category
                   ? "bg-blue-500 text-white"
                   : "bg-gray-200 text-gray-700 hover:bg-blue-300"

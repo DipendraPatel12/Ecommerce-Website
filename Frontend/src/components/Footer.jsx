@@ -38,7 +38,7 @@ const Footer = () => {
 
       {/* Copyright */}
       <div className="text-center text-sm mt-6 opacity-75">
-        &copy; {new Date().getFullYear()} YourCompany. All Rights Reserved.
+        &copy; {new Date().getFullYear()} PosterZ. All Rights Reserved.
       </div>
     </footer>
   );

@@ -27,7 +27,7 @@ const Cart = ({ onClose }) => {
         <div className="flex justify-between items-center border-b pb-2">
           <h3 className="text-lg font-semibold">Shopping Cart</h3>
           <button
-            className="text-2xl text-gray-600 hover:text-red-500"
+            className="text-2xl text-gray-600 cursor-pointer hover:text-red-500"
             onClick={onClose}
           >
             <AiOutlineClose />
@@ -54,7 +54,7 @@ const Cart = ({ onClose }) => {
               <span>₹ {totalAmount}</span>
             </div>
             <button
-              className="w-full bg-black text-white py-2 rounded-md mt-3 hover:bg-gray-800 transition"
+              className="w-full bg-black text-white py-2 cursor-pointer rounded-md mt-3 hover:bg-gray-800 transition"
               onClick={() => dispatch(clearCart())}
             >
               Proceed to Checkout

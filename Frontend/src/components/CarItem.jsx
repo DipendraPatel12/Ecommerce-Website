@@ -32,7 +32,7 @@ const CartItem = ({ item }) => {
       </div>
       <button
         onClick={() => dispatch(removeFromCart(item.id))}
-        className="bg-red-500 text-white px-3 py-1 rounded"
+        className="bg-black cursor-pointer text-white px-3 py-1 rounded"
       >
         Remove
       </button>

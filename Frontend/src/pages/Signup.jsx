@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { signupUser, clearAuthState } from "../Redux/slices/authSlice";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
-import signupHero from "../assets/Bg.jpg";
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -40,11 +39,11 @@ const Signup = () => {
   }, [success, error, navigate, dispatch]);
 
   return (
-    <div className="relative flex items-center justify-center lg:h-[565px] min-h-screen w-full">
+    <div className="relative flex items-center justify-center lg:h-[565px] sm:h-[350px] min-h-screen w-full">
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{
-          backgroundImage: `url(${signupHero})`,
+          backgroundImage: `url("https://res.cloudinary.com/dwen6kq4r/image/upload/v1740594914/Bg_ffhuo9.jpg")`,
           filter: "brightness(50%) blur(2px)",
         }}
       ></div>

@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser,clearAuthState } from "../Redux/slices/authSlice";
+import { loginUser, clearAuthState } from "../Redux/slices/authSlice";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
-import loginHero from "../assets/Bg.jpg";
+
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -34,7 +34,7 @@ const Login = () => {
     if (error) {
       toast.error(error);
     }
-  }, [success, error, navigate,dispatch]);
+  }, [success, error, navigate, dispatch]);
 
   return (
     <div className="relative flex items-center justify-center lg:h-[565px] min-h-screen w-full">
@@ -42,7 +42,7 @@ const Login = () => {
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{
-          backgroundImage: `url(${loginHero})`,
+          backgroundImage: `url("https://res.cloudinary.com/dwen6kq4r/image/upload/v1740594914/Bg_ffhuo9.jpg")`,
           filter: "brightness(50%) blur(2px)",
         }}
       ></div>
