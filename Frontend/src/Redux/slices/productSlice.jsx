@@ -15,15 +15,11 @@ export const addProduct = createAsyncThunk(
   "products/addProduct",
   async (formData, { rejectWithValue }) => {
     try {
-      const response = await axiosClient.post(
-        "/products",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await axiosClient.post("/products", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       return response.data;
     } catch (error) {
       console.error(
@@ -65,17 +61,32 @@ const productSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      // Fetch Products
+      .addCase(fetchProducts.pending, (state) => {
+        state.status = "loading";
+      })
       .addCase(fetchProducts.fulfilled, (state, action) => {
+        state.status = "succeeded";
         state.products = action.payload;
       })
+      .addCase(fetchProducts.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      })
+
+      // Add Product
       .addCase(addProduct.fulfilled, (state, action) => {
         state.products.push(action.payload);
       })
+
+      // Delete Product
       .addCase(deleteProduct.fulfilled, (state, action) => {
         state.products = state.products.filter(
           (product) => product._id !== action.payload
         );
       })
+
+      // Edit Product
       .addCase(editProduct.fulfilled, (state, action) => {
         const index = state.products.findIndex(
           (product) => product._id === action.payload._id

@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts } from "../Redux/slices/productSlice";
 import Product from "../components/Product";
+import Loader from "../components/Loader"; // Import Loader component
 
 const Collection = () => {
   const dispatch = useDispatch();
-  const { products } = useSelector((state) => state.products);
+  const { products, status } = useSelector((state) => state.products); // Get status instead of loading
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [sortOption, setSortOption] = useState("newest");
 
@@ -34,7 +35,10 @@ const Collection = () => {
     } else if (sortOption === "high-to-low") {
       return b.price - a.price;
     } else if (sortOption === "newest") {
-      return new Date(b.createdAt || "2024-01-01") - new Date(a.createdAt || "2024-01-01");
+      return (
+        new Date(b.createdAt || "2024-01-01") -
+        new Date(a.createdAt || "2024-01-01")
+      );
     }
     return 0;
   });
@@ -82,18 +86,23 @@ const Collection = () => {
         </select>
       </div>
 
-      {/* Product Grid */}
-      <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {sortedProducts.length > 0 ? (
-          sortedProducts.map((product) => (
-            <Product key={product._id} product={product} />
-          ))
-        ) : (
-          <p className="text-center col-span-full text-gray-500">
-            No products available in this category.
-          </p>
-        )}
-      </div>
+      {/* Show Loader while loading */}
+      {status === "loading" ? (
+        <Loader />
+      ) : (
+        // Product Grid
+        <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {sortedProducts.length > 0 ? (
+            sortedProducts.map((product) => (
+              <Product key={product._id} product={product} />
+            ))
+          ) : (
+            <p className="text-center col-span-full text-gray-500">
+              No products available in this category.
+            </p>
+          )}
+        </div>
+      )}
     </div>
   );
 };

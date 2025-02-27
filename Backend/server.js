@@ -8,6 +8,11 @@ import productRoutes from "./routes/productRoutes.js";
 
 dotenv.config();
 
+// const corsOptions = {
+//     origin: "http://localhost:5173",
+//     credentials: true // Allow cookies to be sent with requests
+// };
+
 const corsOptions = {
     origin: "https://ecommerce-website-azure-ten.vercel.app",
     credentials: true // Allow cookies to be sent with requests
