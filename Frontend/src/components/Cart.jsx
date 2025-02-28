@@ -16,10 +16,7 @@ const Cart = ({ onClose }) => {
   return (
     <div className="fixed inset-0 flex justify-end z-50">
       {/* Background Overlay */}
-      <div
-        className="fixed inset-0  opacity-50 "
-        onClick={onClose}
-      ></div>
+      <div className="fixed inset-0  opacity-50 " onClick={onClose}></div>
 
       {/* Cart Content */}
       <div className="w-80 sm:w-96 bg-white h-full shadow-lg flex flex-col p-4 transform transition-transform duration-300 ease-in-out">

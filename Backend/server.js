@@ -14,7 +14,7 @@ dotenv.config();
 // };
 
 const corsOptions = {
-    origin: "https://ecommerce-website-azure-ten.vercel.app",
+    origin: "https://poster-z.vercel.app",
     credentials: true // Allow cookies to be sent with requests
 };
 
